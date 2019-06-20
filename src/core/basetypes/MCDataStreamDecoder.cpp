@@ -82,6 +82,12 @@ ErrorCode DataStreamDecoder::flushData()
     return errorCode;
 }
 
+// msvc considers fopen to be "unsafe" and newer compiler versions make
+// this an error
+#ifdef _MSC_VER
+#pragma warning(disable : 4996)
+#endif
+
 ErrorCode DataStreamDecoder::appendDecodedData(Data * decodedData)
 {
     if (mFilename == NULL) {
