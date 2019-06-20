@@ -2360,15 +2360,15 @@ String * String::stringByDeletingPathExtension()
 #ifdef _MSC_VER
 // msvc lacks memmem, this one's from stackoverflow
 // https://stackoverflow.com/questions/52988769/writing-own-memmem-for-windows
-static void *memmem(const void *haystack, size_t haystack_len, 
-                    const void * const needle, const size_t needle_len)
+static const void *memmem(const void *haystack, size_t haystack_len, 
+                          const void * const needle, const size_t needle_len)
 {
    if (haystack == NULL) return NULL; // or assert(haystack != NULL);
    if (haystack_len == 0) return NULL;
    if (needle == NULL) return NULL; // or assert(needle != NULL);
    if (needle_len == 0) return NULL;
 
-   for (const char *h = haystack;
+   for (const char *h = reinterpret_cast<const char*>(haystack);
         haystack_len >= needle_len;
         ++h, --haystack_len) {
       if (!memcmp(h, needle, needle_len)) {
@@ -2381,13 +2381,13 @@ static void *memmem(const void *haystack, size_t haystack_len,
 
 Array * String::componentsSeparatedByString(String * separator)
 {
-    UChar * p;
+    const UChar * p;
     Array * result;
     
     result = Array::array();
     p = mUnicodeChars;
     while (1) {
-        UChar * location;
+        const UChar * location;
 #if 0
         location = u_strstr(p, separator->unicodeCharacters());
         if (location == NULL) {
