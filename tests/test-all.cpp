@@ -11,15 +11,16 @@
 #include <MailCore/MailCore.h>
 #if __APPLE__
 #include <CoreFoundation/CoreFoundation.h>
+#include <unistd.h>
 #endif
 #if __linux__ && !defined(ANDROID) && !defined(__ANDROID__)
 #include <glib.h>
+#include <unistd.h>
 #endif
 #ifdef _MSC_VER
 #include <Windows.h>
+#include <io.h>
 #endif
-
-#include <unistd.h>
 
 static mailcore::String * password = NULL;
 static mailcore::String * displayName = NULL;
